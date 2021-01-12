@@ -32,8 +32,8 @@ public class VehiclesApiSwaggerConfig {
                 "Vehicles Api",
                 "This API give information about vehicles.",
                 "1.0",
-                "http://www.website.com/tos",
-                new Contact("Kexin", "www.udacity", "kexin@xxx.com"),
+                "http://www.website.com/nishanthulwan",
+                new Contact("Nishant Hulwan", "www.udacity.com", "nishanthulwan47@gmail.com"),
                 "License of API",
                 "http://www.website.com/license",
                 Collections.emptyList());
