@@ -2,7 +2,6 @@ package com.udacity.vehicles.service;
 
 import com.udacity.vehicles.client.maps.MapsClient;
 import com.udacity.vehicles.client.prices.PriceClient;
-import com.udacity.vehicles.domain.Location;
 import com.udacity.vehicles.domain.car.Car;
 import com.udacity.vehicles.domain.car.CarRepository;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,7 @@ public class CarService {
      * @return a list of all vehicles in the CarRepository
      */
     public List<Car> list() {
-        return repository.findAll();
+        return this.repository.findAll();
     }
 
     /**
@@ -51,7 +50,7 @@ public class CarService {
          *   If it does not exist, throw a CarNotFoundException
          *   Remove the below code as part of your implementation.
          */
-        Car car = this.repository.findById(id).orElseThrow(CarNotFoundException::new);
+        Car car = Optional.of(this.repository.findById(id)).get().orElseThrow(CarNotFoundException::new);
 
         /**
          * TODO: Use the Pricing Web client you create in `VehiclesApiApplication`
@@ -60,8 +59,7 @@ public class CarService {
          * Note: The car class file uses @transient, meaning you will need to call
          *   the pricing service each time to get the price.
          */
-        String price = this.priceClient.getPrice(id);
-        car.setPrice(price);
+        car.setPrice(this.priceClient.getPrice(car.getId()));
 
         /**
          * TODO: Use the Maps Web client you create in `VehiclesApiApplication`
@@ -71,10 +69,7 @@ public class CarService {
          * Note: The Location class file also uses @transient for the address,
          * meaning the Maps service needs to be called each time for the address.
          */
-        Location carLocation = car.getLocation();
-        Location location = mapsClient.getAddress(carLocation);
-        car.setLocation(location);
-
+        car.setLocation(this.mapsClient.getAddress(car.getLocation()));
         return car;
     }
 
@@ -87,6 +82,7 @@ public class CarService {
         if (car.getId() != null) {
             return repository.findById(car.getId())
                     .map(carToBeUpdated -> {
+                        carToBeUpdated.setCondition(car.getCondition());
                         carToBeUpdated.setDetails(car.getDetails());
                         carToBeUpdated.setLocation(car.getLocation());
                         return repository.save(carToBeUpdated);
@@ -110,12 +106,8 @@ public class CarService {
         /**
          * TODO: Delete the car from the repository.
          */
+        Car car = Optional.ofNullable(this.repository.getOne(id)).orElseThrow(CarNotFoundException::new);
+        this.repository.delete(car);
 
-        Optional<Car> optionalCar = repository.findById(id);
-        if (optionalCar.isPresent()) {
-            repository.deleteById(id);
-        } else {
-            throw new CarNotFoundException();
-        }
     }
 }

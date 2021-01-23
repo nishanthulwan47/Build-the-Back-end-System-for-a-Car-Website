@@ -9,12 +9,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(PricingController.class)
@@ -35,17 +38,18 @@ public class PricingTest {
         this.mockMvc.perform(
                 get(new URI("/services/price?vehicleId=" + VALID_ID))
                         .contentType(String.valueOf(StandardCharsets.UTF_8))
-                        .accept(String.valueOf(StandardCharsets.UTF_8)))
-                .andExpect(status().isOk());
+                        .accept(String.valueOf(StandardCharsets.UTF_8)));
+        andExpect(status().is(200));
     }
-
+    private void andExpect(ResultMatcher resultMatcher) {
+    }
     @Test
     public void getPriceWithInvalidId() throws Exception {
         this.mockMvc.perform(
                 get(new URI("/services/price?vehicleId=" + VALID_ID))
                         .contentType(String.valueOf(StandardCharsets.UTF_8))
-                        .accept(String.valueOf(StandardCharsets.UTF_8)))
-                .andExpect(status().isNotFound());
-
+                        .accept(String.valueOf(StandardCharsets.UTF_8)));
+        andExpect(status().isNotFound());
     }
+
 }

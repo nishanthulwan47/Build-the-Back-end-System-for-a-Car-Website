@@ -25,10 +25,9 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
  */
 @RestController
 @ApiResponses(value = {
-        @ApiResponse(code = 400, message = "This is a bad request, please follow the API documentation for the proper " +
-                "request format"),
-        @ApiResponse(code = 401, message = "Due to security constraints, your access request cannot be authorized"),
-        @ApiResponse(code = 500, message = "The server is down")
+        @ApiResponse(code = 400, message = "This is a bad request"),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 500, message = "Internal server error")
 })
 @RequestMapping("/cars")
 class CarController {
@@ -117,7 +116,7 @@ class CarController {
         /**
          * TODO: Use the Car Service to delete the requested vehicle.
          */
-        carService.delete(id);
+        this.carService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
