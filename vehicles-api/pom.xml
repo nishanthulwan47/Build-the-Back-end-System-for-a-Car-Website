@@ -72,6 +72,13 @@
         </dependency>
 
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.10</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
             <version>2.3.2</version>
@@ -118,9 +125,6 @@
                                 </wsdlOption>
                             </wsdlOptions>
                         </configuration>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
                     </execution>
                 </executions>
             </plugin>
